@@ -177,6 +177,7 @@ ggplot(mollusk_data, aes(x = Diameter, y = Whole_weight)) +
 
 Из графика видно, что с увеличением диаметра моллюсков увеличивается и их вес. При этом при значениях диаметра больше 0.35 более выражена возможная линейная взаимосвязь переменных.
 
+
 Перед установлением факта наличия корреляции проверим выборки на нормальность.
 Для переменной *Diameter* Р-значение равно **`r format.numbers(shapiro.test(mollusk_data$Diameter)$p)`**\n
 Для переменной *Whole_weight* Р-значение равно **`r format.numbers(shapiro.test(mollusk_data$Whole_weight)$p)`**\n
