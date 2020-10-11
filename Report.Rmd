@@ -1,0 +1,190 @@
+---
+title: "Проект No1 “Насколько стара мидия”"
+date: "10/10/2020"
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+    number_sections: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, cache=FALSE}
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("gridExtra")
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+```
+```{r include=FALSE}
+format.numbers <- function(num) {
+  return(sprintf("%.3g", num))
+}
+```
+
+# Подготовка данных
+Данные исследования представлены в виде 11 файлов в формате csv. Для более удобной обработки и анализа этих данных, они были объединены в единую таблицу с использованием пользовательской функции *concat_csv_data*.
+
+```{r echo=TRUE, message=FALSE}
+concat_csv_data <- function(path) {
+  setwd(path)
+  accumulated_data <- data.frame()
+  for (filename in list.files()) {
+    if (endsWith(filename, ".csv")) {
+      input_df <- read.csv(filename)
+      accumulated_data <- rbind(accumulated_data, input_df)
+    }
+  }
+  return(accumulated_data)
+}
+mollusk_data <- concat_csv_data("path_to_data")
+```
+Данная функция принимает на вход абсолютный путь до папки, содержащей данные, и возвращает таблицу, включающую в себя наблюдения из всех файлов с заданным расширением.
+
+# Предварительный анализ данных 
+
+## Проверка данных на корректность
+В данных было приведено неудобное для использования название переменной, обозначающей пол моллюска, кроме того все загруженные данные были представлены строковым типом.
+Данные были преобразованы соответствующим образом, дополнительно были введены метки для уровней фактора переменной *Sex*.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+colnames(mollusk_data)[2] <- "Sex"
+mollusk_data <- mollusk_data %>%
+  transmute(across(everything(), as.numeric))
+mollusk_data$Sex <- factor(mollusk_data$Sex,
+                           levels = c(1, 2, 3),
+                           labels = c("Male", "Female", "Uvenil"))
+```
+Нам до конца не известно, какой моделью можно описать наши данные, поэтому применение интерполяции для заполнения пропущенных значений может привести к ошибкам. Возможно было также заполнить пропущенные значения средними значениями, что тоже требует глубоких знаний об объекте изучения. Поэтому во избежание получения ложных результатов, наблюдения, содержащие пропущенные значения, были удалены.
+```{r echo=TRUE}
+mollusk_data <- na.omit(mollusk_data)
+```
+
+## Проверка данных на наличие выбросов
+
+Разброс значений количественных переменных, сгруппированных по переменной *Sex*, представлен на графике. 
+
+```{r echo=FALSE, fig.height=7, fig.width=9}
+grid.arrange(ggplot(mollusk_data, aes(x = Sex, y = Rings)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3, outlier.size = 0.5) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex, y = Length)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Diameter)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Height)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Whole_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Shucked_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Viscera_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Shell_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ncol=2)
+```
+
+Как видно из графиков, практически все переменные имеют значительное число выбросов. Для удаления выбросов была использована пользовательская функция *outliers.rm*.
+
+```{r}
+outliers.rm <- function(x) {
+  q1 <- quantile(x, 0.25, na.rm = T)
+  q3 <- quantile(x, 0.75, na.rm = T)
+  iqr <- IQR(x, na.rm = T)
+  return(x>q1-1.5*iqr & x<q3+1.5*iqr)
+}
+
+mollusk_data <- mollusk_data %>%
+    filter(across(-Sex, outliers.rm))
+```
+
+## Оценка взаимосвязей и формулировка гипотез
+
+Корреляционная матрица, приведённая ниже, позволяет оценить степень взаимосвязи между переменными.
+```{r echo=FALSE, fig.height=10, fig.width=10}
+pairs(select(mollusk_data, -Sex))
+```
+
+Распределение количественных переменных в зависимости от пола.
+```{r echo=FALSE, fig.height=12, fig.width=10}
+grid.arrange(ggplot(mollusk_data, aes(x = Sex, y = Rings)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3, outlier.size = 0.5) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex, y = Length)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Diameter)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Height)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Whole_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Shucked_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Viscera_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ggplot(mollusk_data, aes(x = Sex,y = Shell_weight)) + geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw(),
+             ncol=2)
+```
+
+Из графиков можно заметить, что количественные переменные имеют положительную взаимосвязь, а размеры взрослых особей во многом схожи вне зависимости от пола.
+  <ul>
+    Сформулируем следующие гипотезы:
+    <li>Линейные размеры моллюсков различаются у особей взрослых и ювенильных особей.
+    <li>Линейные размеры моллюсков не различаются у женских и мужских особей.
+    <li>Существует линейная зависимость между размерами моллюска и его весом.
+  </ul>
+  
+
+# Углубленный анализ данных
+
+## Описание количественных переменных
+В приведённой ниже таблице отражены средние и стандартные отклонения длин моллюсков разных полов.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+mollusk_data %>% 
+  group_by(Sex) %>% 
+  summarise(Mean = round(mean(Length), 3), Sd = round(sd(Length), 3), N = round(length(Length), 3))
+```
+
+Из данных выяснилось, что у **`r format.numbers(sum(mollusk_data$Height <= 0.165) / length(mollusk_data$Height) * 100)`** процентов моллюсков значение переменной *Height* не превышает **0.165**.
+
+Значение переменной *Length* равное **`r format.numbers(as.numeric(quantile(mollusk_data$Length, 0.92)))`**, больше, чем у 92% от всех наблюдений.
+
+
+Переменная *Length* была стандартизована следующим образом.
+```{r}
+Length_z_scores <- (mollusk_data$Length - mean(mollusk_data$Length)) /sd(mollusk_data$Length)
+```
+
+## Проверка статистических гипотез
+Визуализация распределения диаметров моллюсков с 5 и 15 кольцами.
+```{r echo=FALSE}
+ggplot(subset(mollusk_data, Rings %in% c(5, 15)), aes(x = factor(Rings), y = Diameter)) +
+         geom_boxplot(width = 0.5, fill = "#88DDDB", lwd = 0.3) + theme_linedraw()
+```
+
+Из графика видно, что моллюски с 15 кольцами имеют больший диаметр, чем моллюски с 5 кольцами.
+Перед проверкой гипотезы о равенстве средних значений для данных выборок необходимо определить подчиняются ли распределения нормальному закону.
+
+Проверка распределения на нормальность при помощи критерия Шапиро-Уилка.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+mollusk_data %>% filter(Rings %in% c(15, 5)) %>% 
+  group_by(Rings) %>%
+  summarise(p_value = round(shapiro.test(Diameter)$p, 3), Sd = round(sd(Diameter), 2), Mean = round(mean(Diameter), 2), N = length(Diameter))
+```
+По данным теста распределение диаметров у моллюсков с 15 кольцами значимо не отличается от нормального, а у моллюсков с 5 кольцами значимо отличается от нормального. Следовательно для сравнения средних у данных групп следует использовать непараметрический критерий Уилкоксона. Для этого сформулируем одностороннюю альтернативную гипотезу: **Средний диаметр у моллюсков с 5 кольцами меньше, чем средний диаметр у моллюсков с 15 кольцами** и используем P-уровень значимости равный 0.95.
+
+```{r message=FALSE, warning=FALSE}
+test_res <- wilcox.test(as.numeric(subset(mollusk_data, Rings == 5)$Rings),
+            as.numeric(subset(mollusk_data, Rings == 15)$Rings),
+            alternative = "less")
+```
+P-значение равно **`r format.numbers(test_res$p.value)`**, что позволяет отвергнуть нулевую гипотезу о равенстве средних.
+
+
+Для изучения взаимосвязи переменных *Diametr* и *Whole_weight* необходимо сперва визуализировать данные.
+```{r echo=FALSE, fig.height=10, fig.width=10, message=FALSE, warning=FALSE}
+ggplot(mollusk_data, aes(x = Diameter, y = Whole_weight)) +
+  geom_point(aes(col = Sex)) +
+  geom_smooth(method = "lm", col = "#666666") +
+  theme_linedraw()
+```
+
+Из графика видно, что с увеличением диаметра моллюсков увеличивается и их вес. При этом при значениях диаметра больше 0.35 более выражена возможная линейная взаимосвязь переменных.
+
+Перед установлением факта наличия корреляции проверим выборки на нормальность.
+Для переменной *Diameter* Р-значение равно **`r format.numbers(shapiro.test(mollusk_data$Diameter)$p)`**\n
+Для переменной *Whole_weight* Р-значение равно **`r format.numbers(shapiro.test(mollusk_data$Whole_weight)$p)`**\n
+Следовательно распределения веса и диаметра моллюсков значимо отличаются от нормального.
+Это означает, что для расчёта корреляции необходимо воспользоваться критерием Спирмена.
+```{r message=FALSE, warning=FALSE, include=FALSE}
+cor.test(mollusk_data$Diameter, mollusk_data$Whole_weight, method = "spearman")
+```
+Р-значение намного меньше 0.05, значит гипотеза о равенстве нулю коэффициента коррелляции ложна. Значение **r = `r format.numbers(cor(mollusk_data$Diameter, mollusk_data$Whole_weight, method = "spearman"))`** позволяет сделать вывод о сильной взаимосвязи данных переменных.
+
+
