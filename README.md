@@ -16,4 +16,4 @@
 
 Детальный ход работы, отражён в файле **Report.rmd**.
 
-Готовый отчёт доступен по [ссылке](https://krglkvrmn.github.io/BI_Stat_2020/Report.html)
+Готовый отчёт доступен по [ссылке](https://krglkvrmn.github.io/BI_Stat_2020/Report_project1.html)
