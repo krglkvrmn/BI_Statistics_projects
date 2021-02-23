@@ -1,6 +1,6 @@
 # Project №3 "Protein expression analysis"
 
-The project was carried out within the course **"Statistics and Data Analysis in R" ** in Institute of Bioinformatics.
+The project was carried out within the course **"Statistics and Data Analysis in R"** in Institute of Bioinformatics.
 
 ## Project description
 
