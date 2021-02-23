@@ -44,7 +44,7 @@ More detailed data set description and data itself can be found [here](https://a
 The initial data has following structure described in [[S1]](#S1).
 
 ```{r echo=FALSE, comment=""}
-mice_data <- read_xls("/home/roman/BI/statistics/BI_Stat_2020/Data/Data_Cortex_Nuclear.xls")
+mice_data <- read_xls("Data/Data_Cortex_Nuclear.xls")
 S1_dat <- mice_data
 ```
 
