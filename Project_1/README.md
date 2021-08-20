@@ -1,19 +1,19 @@
-# Проект №1
+# Project #1
 
-Проект выполнен в рамках курса **"Cтатистика и анализ данных в R"** Института биоинформатики.
+The project was carried out during course "Statistics and Data Analysis in R" of The Institute of Bioinformatics.
 
-## Описание проекта
+## Project description
 
-В проекте анализируются данные по размерам, весу, полу и возрасту моллюсков, которые были собраны различными людьми в различное время.
+The project analyzes data on the size, weight, sex and age of molluscs that were collected by different people at different times.
 
-В ходе проекта планировалось:
+The project had following goals:
 
-* Объединить данные
-* Предобработать данные
-* Произвести EDA
-* Выдвигать и проверять простые статистические гипотезы
-* Визуализировать данные
+* Combine data
+* Preprocess data
+* Perform EDA
+* Propose and test simple statistical hypotheses
+* Visualize data
 
-Детальный ход работы, отражён в файле **Report.rmd**.
+Detailed workflow description can be found in **Report.rmd**.
 
-Готовый отчёт доступен по [ссылке](https://krglkvrmn.github.io/BI_Stat_2020/Report_project1.html).
+Final report is available via[link](https://krglkvrmn.github.io/BI_Statistics_projects/Report_project1.html).
