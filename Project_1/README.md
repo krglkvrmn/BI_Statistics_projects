@@ -1,6 +1,6 @@
 # Project #1
 
-The project was carried out during course "Statistics and Data Analysis in R" of The Institute of Bioinformatics.
+The project was carried out during course **"Statistics and Data Analysis in R"** of The Institute of Bioinformatics.
 
 ## Project description
 
