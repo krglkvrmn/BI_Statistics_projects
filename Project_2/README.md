@@ -15,5 +15,5 @@ Project objectives:
 
 Detailed workflow including R code can be found in **Report.rmd**.
 
-Rendered report is available via [link](https://krglkvrmn.github.io/BI_Stat_2020/Report_project3.html)(https://krglkvrmn.github.io/BI_Statistics_projects/Report_project2.html).
+Rendered report is available via [link](https://krglkvrmn.github.io/BI_Statistics_projects/Report_project2.html).
 
