@@ -1,18 +1,19 @@
-# Проект №2
+# Project #2
 
-Проект выполнен в рамках курса  **"Cтатистика и анализ данных в R"** Института биоинформатики.
+The project was carried out within the course **"Statistics and Data Analysis in R"** in Institute of Bioinformatics.
 
-## Описание проекта
+## Project description
 
-В проекте анализируются данные о ценности жилья в Бостоне в 1970-1980-х годах (датасет Boston).
+In this project Boston dataset was analyzed.
 
-В ходе проекта планировалось:
+Project objectives:
 
-* Построить полную линейную модель, предсказывающую цену жилья
-* Произвести её диагностику
-* Сделать выводы о качестве модели
-* Дать рекомендации условному "заказчику" по поводу района для постройки дома 
+* Build a linear model, which is able to predict housing price.
+* Explore obtained model and check conditions of applicability.
+* Make conclusions about model's quality
+* Give recommendations to the "customer" about the area for building a house
 
-Детальный ход работы, отражён в файле **Report.rmd**.
+Detailed workflow including R code can be found in **Report.rmd**.
 
-Готовый отчёт доступен по [ссылке](https://krglkvrmn.github.io/BI_Stat_2020/Report_project2.html).
+Rendered report is available via [link](https://krglkvrmn.github.io/BI_Stat_2020/Report_project3.html)(https://krglkvrmn.github.io/BI_Statistics_projects/Report_project2.html).
+

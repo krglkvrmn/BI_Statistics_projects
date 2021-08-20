@@ -1,20 +1,20 @@
-# Дополнительный проект (ANOVA)
+# Extra project (ANOVA)
 
-Проект выполнен в рамках курса **"Cтатистика и анализ данных в R"** Института биоинформатики.
+The project was carried out within the course **"Statistics and Data Analysis in R"** in Institute of Bioinformatics.
 
-## Описание проекта
+## Project description
 
-В проекте анализируются данные о длительности пребывания пациентов в стационаре при приёме различных препаратов, собранные 20 различными врачами.
+The project analyzes data on the length of stay of patients in the hospital while taking various drugs, collected by 20 different doctors.
 
-В ходе проекта планировалось:
+Project objectives:
 
-- Считать данные и привести их в соответствие с концепцией tidy-data
-- Провести EDA
-- Провести двухвакторный дисперсионный анализ числа дней, проведённых в больнице, по типу принимаемого препарата и полу.
-- Проверить условия применимости модели
-- Проинтерпретировать полученные результаты
+- Parse data and make it satisfying *tidy-data* recomendations.
+- Perform EDA.
+- Perform two-way ANOVA of amount of days spent in hospital depending on drug type and gender.
+- Check conditions of applicability for obtained model.
+- Interpret results.
 
-Детальный ход работы, отражён в файле **Report.rmd**.
+Detailed workflow including R code can be found in **Report.rmd**.
 
-Готовый отчёт доступен по [ссылке](https://krglkvrmn.github.io/BI_Stat_2020/Report_project_anova.html).
+Rendered report is available via [link](https://krglkvrmn.github.io/BI_Statistics_projects/Report_project_anova.html).
 

@@ -15,4 +15,4 @@ In this project survival in a randomized trial comparing two treatments for ovar
 
 Detailed workflow including R code can be found in **Report.rmd**.
 
-Rendered report is available via [link](https://krglkvrmn.github.io/BI_Stat_2020/Report_project_survival.html).
+Rendered report is available via [link](https://krglkvrmn.github.io/BI_Statistics_projects/Report_project_survival.html).
