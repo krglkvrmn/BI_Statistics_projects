@@ -1,8 +1,8 @@
-# BI_Stat_2020
+# BI_Statistics_projects
 
-Репозиторий содержит проектные задания по курсу **"Cтатистика и анализ данных в R"** [Института биоинформатики](https://bioinf.me/).
+The repository contains projects that were carried out during the course **"Statistics and Data Analysis in R"** in the [Bioinformatics Institute](https://bioinf.me/).
 
-Задания выполнены в виде документов *R markdown*.
+Projects are represented by *R markdown* documents.
 
-Отчёты представлены в виде *html* страниц.
+Reports are saved as *html* pages.
 
